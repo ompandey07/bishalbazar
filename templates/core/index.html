@@ -38,14 +38,14 @@
         <div class="relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden">
             {% for image in banners.images.all %}
             <div class="carousel-slide {% if forloop.first %}active{% endif %} absolute inset-0 opacity-0 transition-all duration-1000 ease-out">
-                <img src="{{ image.image.url }}" alt="{{ image.title }}" class="w-full h-full object-cover">
+                <img src="{{ image.banner_image.url }}" alt="{{ banners.banner_name }}" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
                 <div class="absolute top-8 left-8 right-8">
-                    <p class="text-primary text-sm uppercase tracking-[5px] mb-2">{{ banners.banner_title }}</p>
+                    <p class="text-primary text-sm uppercase tracking-[5px] mb-2">{{ banners.banner_name }}</p>
                     <div class="w-20 h-0.5 bg-primary"></div>
                 </div>
                 <div class="absolute bottom-8 left-8 right-8 text-white">
-                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">{{ image.title }}</h1>
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">{{ banners.banner_name }}</h1>
                     <p class="text-gray-300 text-lg md:text-xl max-w-2xl">काठमाडौंको सबैभन्दा मनपर्ने शपिङ कम्प्लेक्स</p>
                     <div class="flex items-center gap-4 mt-8">
                         <span class="text-5xl font-bold text-primary">0{{ forloop.counter }}</span>
