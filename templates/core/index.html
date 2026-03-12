@@ -68,6 +68,17 @@
             {% endfor %}
         </div>
     </div>
+    {% else %}
+    <div class="relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden bg-gray-100 dark:bg-zinc-900 flex items-center justify-center">
+        <div class="text-center">
+            <div class="w-24 h-24 bg-primary/10 flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="image-off" class="w-10 h-10 text-primary/40"></i>
+            </div>
+            <p class="text-sm uppercase tracking-[5px] text-primary mb-3">बिशाल बजार</p>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-400 dark:text-white/20">कुनै ब्यानर पोस्ट गरिएको छैन</h2>
+            <p class="text-gray-400 dark:text-white/20 mt-3 text-sm uppercase tracking-widest">No Banner Posted Yet</p>
+        </div>
+    </div>
     {% endif %}
 </section>
 
