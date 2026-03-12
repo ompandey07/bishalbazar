@@ -1,0 +1,107 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{{ news.news_title }} - Bishal Bazar{% endblock %}
+
+{% block content %}
+<section class="py-16 px-4 md:px-8 lg:px-16">
+    <div class="container mx-auto max-w-4xl">
+        <!-- Breadcrumb -->
+        <nav class="mb-12 reveal">
+            <div class="flex items-center gap-3 text-sm flex-wrap">
+                <a href="{% url 'index' %}" class="hover:text-primary transition text-gray-500 dark:text-gray-400">गृहपृष्ठ</a>
+                <span class="text-gray-300 dark:text-gray-600">/</span>
+                <a href="{% url 'news' %}" class="hover:text-primary transition text-gray-500 dark:text-gray-400">समाचार</a>
+                <span class="text-gray-300 dark:text-gray-600">/</span>
+                <span class="text-primary line-clamp-1">{{ news.news_title|truncatewords:5 }}</span>
+            </div>
+        </nav>
+
+        <article class="reveal">
+            {% if news.news_image %}
+            <div class="relative aspect-video mb-12 overflow-hidden">
+                <img src="{{ news.news_image.url }}" alt="{{ news.news_title }}" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+            </div>
+            {% endif %}
+
+            <div class="flex items-center gap-6 mb-8 text-sm">
+                <span class="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                    <i data-lucide="calendar" class="w-4 h-4 text-primary"></i>
+                    {{ news.created_at|date:"F d, Y" }}
+                </span>
+                <span class="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                    <i data-lucide="clock" class="w-4 h-4 text-primary"></i>
+                    {{ news.created_at|date:"H:i" }}
+                </span>
+            </div>
+
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 leading-tight text-gray-800 dark:text-white">{{ news.news_title }}</h1>
+            <div class="w-20 h-1 bg-primary mb-12"></div>
+
+            <div class="prose max-w-none leading-relaxed text-lg space-y-6 text-gray-600 dark:text-gray-300">
+                {{ news.news_descriptions|linebreaks }}
+            </div>
+
+            {% if news.attachments %}
+            <div class="mt-16 p-8 border bg-gray-50 dark:bg-zinc-900 border-gray-100 dark:border-white/5">
+                <h3 class="text-xl font-bold mb-6 flex items-center gap-3 text-gray-800 dark:text-white">
+                    <i data-lucide="paperclip" class="w-5 h-5 text-primary"></i>
+                    संलग्न फाइल
+                </h3>
+                <div class="flex gap-4">
+                    <a href="{{ news.attachments.url }}" target="_blank" class="inline-flex items-center gap-3 px-6 py-3 border border-gray-200 dark:border-white/10 hover:border-primary hover:text-primary transition">
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                        हेर्नुहोस्
+                    </a>
+                    <a href="{{ news.attachments.url }}" download class="inline-flex items-center gap-3 px-6 py-3 bg-primary text-white hover:bg-red-700 transition">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        डाउनलोड गर्नुहोस्
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="mt-16 pt-12 border-t border-gray-100 dark:border-white/5 flex flex-col sm:flex-row gap-4 justify-between">
+                <a href="{% url 'news' %}" class="inline-flex items-center gap-3 hover:text-primary transition group text-gray-500 dark:text-gray-400">
+                    <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-2 transition"></i>
+                    <span class="uppercase tracking-wider text-sm">सबै समाचार</span>
+                </a>
+                <a href="{% url 'index' %}" class="inline-flex items-center gap-3 hover:text-primary transition group text-gray-500 dark:text-gray-400">
+                    <span class="uppercase tracking-wider text-sm">गृहपृष्ठ</span>
+                    <i data-lucide="home" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </article>
+    </div>
+</section>
+
+{% if related_news %}
+<section class="py-20 px-4 md:px-8 lg:px-16 bg-gray-50 dark:bg-zinc-900/50">
+    <div class="container mx-auto">
+        <h2 class="text-3xl font-bold mb-12 text-gray-800 dark:text-white">सम्बन्धित समाचार</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {% for item in related_news %}
+            <article class="card-hover border group bg-white dark:bg-zinc-900 border-gray-100 dark:border-white/5">
+                <div class="relative h-48 overflow-hidden">
+                    {% if item.news_image %}
+                    <img src="{{ item.news_image.url }}" alt="{{ item.news_title }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                    {% else %}
+                    <div class="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                        <i data-lucide="newspaper" class="w-12 h-12 text-gray-300 dark:text-white/10"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="p-6">
+                    <h3 class="text-lg font-bold mb-3 line-clamp-2 group-hover:text-primary transition text-gray-800 dark:text-white">{{ item.news_title }}</h3>
+                    <a href="{% url 'news_detail' item.slug %}" class="inline-flex items-center gap-2 text-primary text-sm uppercase tracking-wider hover-line">
+                        थप पढ्नुहोस् <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

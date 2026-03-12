@@ -1,0 +1,105 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}ग्यालेरी - Bishal Bazar{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="py-20 px-4 md:px-8 lg:px-16 border-b border-gray-100 dark:border-white/5">
+    <div class="container mx-auto text-center">
+        <p class="text-primary text-sm uppercase tracking-[5px] mb-4 reveal">तस्बिरहरू</p>
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold reveal text-gray-800 dark:text-white">फोटो <span class="text-stroke">ग्यालेरी</span></h1>
+        <p class="mt-6 max-w-2xl mx-auto reveal text-gray-500 dark:text-gray-400">बिशाल बजारको यादगार क्षणहरूको संग्रह</p>
+    </div>
+</section>
+
+<!-- Gallery Grid -->
+<section class="py-20 px-4 md:px-8 lg:px-16">
+    <div class="container mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {% for item in gallery_items %}
+            <div class="reveal aspect-square overflow-hidden group cursor-pointer" onclick="openModal('{{ item.gallery_image.url }}', '{{ item.gallery_title }}')" style="transition-delay: {{ forloop.counter0 }}0ms;">
+                <div class="relative w-full h-full">
+                    <img src="{{ item.gallery_image.url }}" alt="{{ item.gallery_title }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/70 transition duration-500 flex items-center justify-center">
+                        <div class="opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition duration-500 text-center text-white">
+                            <div class="w-16 h-16 border-2 border-white flex items-center justify-center mx-auto mb-4 hover:bg-primary hover:border-primary transition">
+                                <i data-lucide="expand" class="w-6 h-6"></i>
+                            </div>
+                            <p class="text-sm uppercase tracking-wider px-4 line-clamp-2">{{ item.gallery_title }}</p>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-4 left-4 bg-primary px-3 py-1 text-xs text-white">{{ item.created_at|date:"M d, Y" }}</div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-20">
+                <i data-lucide="image" class="w-20 h-20 mx-auto mb-6 text-gray-300 dark:text-gray-700"></i>
+                <p class="text-gray-500 dark:text-gray-400 text-xl">ग्यालेरी उपलब्ध छैन</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Back Button -->
+<section class="pb-20 px-4 md:px-8 lg:px-16">
+    <div class="container mx-auto text-center">
+        <a href="{% url 'index' %}" class="inline-flex items-center gap-4 px-10 py-5 border uppercase tracking-wider text-sm hover:bg-primary hover:border-primary hover:text-white transition group border-gray-300 dark:border-white/30 text-gray-700 dark:text-white">
+            <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-2 transition"></i>
+            गृहपृष्ठमा फर्कनुहोस्
+        </a>
+    </div>
+</section>
+
+<!-- Modal -->
+<div id="imageModal" class="fixed inset-0 bg-black/95 z-[100] hidden items-center justify-center p-8" onclick="closeModal()">
+    <button class="absolute top-8 right-8 w-14 h-14 border border-white/30 flex items-center justify-center hover:bg-primary hover:border-primary transition z-10 text-white">
+        <i data-lucide="x" class="w-6 h-6"></i>
+    </button>
+    <button onclick="event.stopPropagation(); prevImage();" class="absolute left-8 top-1/2 -translate-y-1/2 w-14 h-14 border border-white/30 flex items-center justify-center hover:bg-primary hover:border-primary transition text-white">
+        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+    </button>
+    <button onclick="event.stopPropagation(); nextImage();" class="absolute right-8 top-1/2 -translate-y-1/2 w-14 h-14 border border-white/30 flex items-center justify-center hover:bg-primary hover:border-primary transition text-white">
+        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+    </button>
+    <div class="max-w-6xl w-full" onclick="event.stopPropagation()">
+        <img id="modalImg" src="" alt="" class="w-full max-h-[70vh] object-contain">
+        <p id="modalCaption" class="text-center mt-8 text-2xl font-bold text-white"></p>
+    </div>
+</div>
+
+<script>
+    const galleryImages = [{% for item in gallery_items %}{ src: '{{ item.gallery_image.url }}', title: '{{ item.gallery_title }}' },{% endfor %}];
+    let currentImageIndex = 0;
+    function openModal(src, title) {
+        currentImageIndex = galleryImages.findIndex(img => img.src === src);
+        document.getElementById('imageModal').classList.remove('hidden');
+        document.getElementById('imageModal').classList.add('flex');
+        document.getElementById('modalImg').src = src;
+        document.getElementById('modalCaption').textContent = title;
+        document.body.style.overflow = 'hidden';
+        lucide.createIcons();
+    }
+    function closeModal() {
+        document.getElementById('imageModal').classList.add('hidden');
+        document.getElementById('imageModal').classList.remove('flex');
+        document.body.style.overflow = 'auto';
+    }
+    function nextImage() {
+        currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+        document.getElementById('modalImg').src = galleryImages[currentImageIndex].src;
+        document.getElementById('modalCaption').textContent = galleryImages[currentImageIndex].title;
+    }
+    function prevImage() {
+        currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+        document.getElementById('modalImg').src = galleryImages[currentImageIndex].src;
+        document.getElementById('modalCaption').textContent = galleryImages[currentImageIndex].title;
+    }
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeModal();
+        if (e.key === 'ArrowRight') nextImage();
+        if (e.key === 'ArrowLeft') prevImage();
+    });
+</script>
+{% endblock %}

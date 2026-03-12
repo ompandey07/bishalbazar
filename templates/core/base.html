@@ -1,0 +1,474 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ne" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bishal Bazar | Shopping Complex{% endblock %}</title>
+    <link rel="shortcut icon" href="{% static "favicon.png" %}" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#DC2626',
+                    },
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Space Grotesk', sans-serif; overflow-x: hidden; }
+        .light body { background: #ffffff; color: #1a1a1a; }
+        .dark body { background: #0a0a0a; color: #ffffff; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        .light ::-webkit-scrollbar-track { background: #f1f1f1; }
+        .dark ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #DC2626; }
+
+        /* YouTube Style Top Bar Preloader */
+        .top-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #DC2626, #ff6b6b, #DC2626);
+            background-size: 200% 100%;
+            z-index: 999999;
+            animation: loading-bar 1.5s ease-in-out infinite, progress 1s ease-out forwards;
+        }
+
+        @keyframes loading-bar {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes progress {
+            0% { width: 0%; }
+            20% { width: 20%; }
+            40% { width: 40%; }
+            60% { width: 60%; }
+            80% { width: 80%; }
+            100% { width: 100%; }
+        }
+
+        .top-loader.complete {
+            width: 100% !important;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Magnetic Button */
+        .magnetic-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .magnetic-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
+            background: rgba(220, 38, 38, 0.1);
+            transition: all 0.5s ease;
+            transform: translate(-50%, -50%);
+        }
+        .magnetic-btn:hover::before { width: 300%; height: 300%; }
+
+        /* Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Text Stroke */
+        .text-stroke { -webkit-text-stroke: 2px #DC2626; color: transparent; }
+
+        /* Hover Line */
+        .hover-line { position: relative; }
+        .hover-line::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0;
+            width: 0; height: 2px;
+            background: #DC2626;
+            transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .hover-line:hover::after { width: 100%; }
+
+        /* Card Hover */
+        .card-hover { transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .card-hover:hover { transform: translateY(-10px) scale(1.02); }
+
+        /* Custom Scroll */
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #DC2626; }
+
+        /* Line Clamp */
+        .line-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    </style>
+</head>
+<body>
+    <!-- YouTube Style Top Bar Preloader -->
+    <div id="topLoader" class="top-loader"></div>
+
+    <!-- Navigation -->
+    <nav id="mainNav" class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-zinc-950 border-b border-gray-100 dark:border-white/5">
+        <!-- Top Bar -->
+        <div class="bg-primary text-white">
+            <div class="container mx-auto px-8">
+                <div class="flex items-center justify-between py-2 text-sm">
+                    <div class="flex items-center gap-8">
+                        <a href="tel:01-5342185" class="flex items-center gap-2 hover:opacity-70 transition">
+                            <i data-lucide="phone" class="w-4 h-4"></i>
+                            <span>01-5342185, 01-5322423</span>
+                        </a>
+                        <a href="mailto:info@bishalbazar.com.np" class="hidden md:flex items-center gap-2 hover:opacity-70 transition">
+                            <i data-lucide="mail" class="w-4 h-4"></i>
+                            <span>info@bishalbazar.com.np</span>
+                        </a>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <a href="#" class="hover:opacity-70 transition"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                        <a href="#" class="hover:opacity-70 transition"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                        <a href="#" class="hover:opacity-70 transition"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Nav -->
+        <div class="container mx-auto px-8 bg-white dark:bg-zinc-950">
+            <div class="flex items-center justify-between h-20">
+                <a href="{% url 'index' %}" class="flex items-center">
+                    <img src="{% static 'bishal-bazar-logo.png' %}" alt="Bishal Bazar" class="h-14 md:h-16">
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center gap-2">
+                    <a href="{% url 'index' %}" class="px-5 py-3 text-sm uppercase tracking-wider hover-line hover:text-primary transition text-gray-800 dark:text-white">
+                        गृहपृष्ठ
+                    </a>
+                    
+                    <!-- About Dropdown -->
+                    <div class="relative" id="aboutDropdown">
+                        <button onclick="toggleDropdown('aboutMenu')" class="px-5 py-3 text-sm uppercase tracking-wider hover-line hover:text-primary transition flex items-center gap-2 text-gray-800 dark:text-white">
+                            हाम्रो बारेमा
+                            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-300" id="aboutIcon"></i>
+                        </button>
+                        <div id="aboutMenu" class="absolute top-full left-0 mt-2 min-w-[220px] opacity-0 invisible transform -translate-y-4 transition-all duration-300 bg-white dark:bg-zinc-900 border border-gray-100 dark:border-white/10 shadow-xl">
+                            <a href="#" class="block px-5 py-4 text-sm hover:bg-primary hover:text-white transition border-b border-gray-100 dark:border-white/5 text-gray-700 dark:text-gray-300">
+                                हाम्रो परिचय
+                            </a>
+                            <a href="{% url 'bod' %}" class="block px-5 py-4 text-sm hover:bg-primary hover:text-white transition border-b border-gray-100 dark:border-white/5 text-gray-700 dark:text-gray-300">
+                                सञ्चालक समिति
+                            </a>
+                            <a href="{% url 'staff' %}" class="block px-5 py-4 text-sm hover:bg-primary hover:text-white transition text-gray-700 dark:text-gray-300">
+                                हाम्रो कर्मचारीहरु
+                            </a>
+                        </div>
+                    </div>
+
+                    <a href="{% url 'report' %}" class="px-5 py-3 text-sm uppercase tracking-wider hover-line hover:text-primary transition text-gray-800 dark:text-white">
+                        रिपोर्टहरू
+                    </a>
+                    <a href="{% url 'news' %}" class="px-5 py-3 text-sm uppercase tracking-wider hover-line hover:text-primary transition text-gray-800 dark:text-white">
+                        समाचार
+                    </a>
+                    <a href="{% url 'gallery' %}" class="px-5 py-3 text-sm uppercase tracking-wider hover-line hover:text-primary transition text-gray-800 dark:text-white">
+                        ग्यालेरी
+                    </a>
+
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" class="ml-4 w-12 h-12 flex items-center justify-center bg-gray-100 dark:bg-zinc-800 hover:bg-primary hover:text-white transition" title="थिम परिवर्तन">
+                        <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                        <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+                    </button>
+
+                    <a href="{% url 'contact' %}" class="ml-2 px-8 py-3 bg-primary text-white text-sm uppercase tracking-wider magnetic-btn hover:bg-red-700 transition">
+                        सम्पर्क
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center gap-4 lg:hidden">
+                    <button onclick="toggleTheme()" class="w-10 h-10 flex items-center justify-center bg-gray-100 dark:bg-zinc-800 hover:bg-primary hover:text-white transition">
+                        <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                        <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+                    </button>
+                    <button class="w-12 h-12 flex flex-col items-center justify-center gap-1.5" onclick="toggleMobileMenu()">
+                        <span class="w-6 h-0.5 transition-all duration-300 bg-gray-800 dark:bg-white" id="menuLine1"></span>
+                        <span class="w-6 h-0.5 transition-all duration-300 bg-gray-800 dark:bg-white" id="menuLine2"></span>
+                        <span class="w-4 h-0.5 transition-all duration-300 ml-auto bg-gray-800 dark:bg-white" id="menuLine3"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="lg:hidden fixed inset-0 top-[108px] transform translate-x-full transition-transform duration-500 z-40 bg-white dark:bg-zinc-950 overflow-y-auto">
+            <div class="container mx-auto px-8 py-12">
+                <a href="{% url 'index' %}" class="block py-5 text-2xl font-light border-b hover:text-primary hover:pl-4 transition-all border-gray-100 dark:border-white/10 text-gray-800 dark:text-white">
+                    गृहपृष्ठ
+                </a>
+                <div>
+                    <button onclick="toggleMobileDropdown()" class="w-full py-5 text-2xl font-light border-b hover:text-primary hover:pl-4 transition-all flex items-center justify-between border-gray-100 dark:border-white/10 text-gray-800 dark:text-white">
+                        हाम्रो बारेमा
+                        <i data-lucide="plus" class="w-5 h-5" id="mobileDropdownIcon"></i>
+                    </button>
+                    <div id="mobileDropdownMenu" class="hidden border-b bg-gray-50 dark:bg-zinc-900 border-gray-100 dark:border-white/10">
+                        <a href="#" class="block px-6 py-4 text-lg hover:text-primary transition text-gray-700 dark:text-gray-300">
+                            हाम्रो परिचय
+                        </a>
+                        <a href="{% url 'bod' %}" class="block px-6 py-4 text-lg hover:text-primary transition text-gray-700 dark:text-gray-300">
+                            सञ्चालक समिति
+                        </a>
+                        <a href="{% url 'staff' %}" class="block px-6 py-4 text-lg hover:text-primary transition text-gray-700 dark:text-gray-300">
+                            हाम्रो कर्मचारीहरु
+                        </a>
+                    </div>
+                </div>
+                <a href="{% url 'report' %}" class="block py-5 text-2xl font-light border-b hover:text-primary hover:pl-4 transition-all border-gray-100 dark:border-white/10 text-gray-800 dark:text-white">
+                    रिपोर्टहरू
+                </a>
+                <a href="{% url 'news' %}" class="block py-5 text-2xl font-light border-b hover:text-primary hover:pl-4 transition-all border-gray-100 dark:border-white/10 text-gray-800 dark:text-white">
+                    समाचार
+                </a>
+                <a href="{% url 'gallery' %}" class="block py-5 text-2xl font-light border-b hover:text-primary hover:pl-4 transition-all border-gray-100 dark:border-white/10 text-gray-800 dark:text-white">
+                    ग्यालेरी
+                </a>
+                <a href="{% url 'contact' %}" class="block py-5 text-2xl font-light border-b hover:text-primary hover:pl-4 transition-all border-gray-100 dark:border-white/10 text-gray-800 dark:text-white">
+                    सम्पर्क
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Spacer for fixed nav -->
+    <div class="h-[108px]"></div>
+
+    <!-- Main Content -->
+    <main class="min-h-screen">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 dark:bg-zinc-950 border-t border-gray-100 dark:border-white/5">
+        <div class="container mx-auto px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <!-- Brand -->
+                <div>
+                    <a href="{% url 'index' %}" class="inline-block mb-6">
+                        <img src="{% static 'bishal-bazar-logo.png' %}" alt="Bishal Bazar" class="h-14">
+                    </a>
+                    <p class="text-sm leading-relaxed mb-6 text-gray-600 dark:text-gray-400">
+                        काठमाडौंको सबैभन्दा मनपर्ने शपिङ कम्प्लेक्स। २०२६ साल देखि सेवामा।
+                    </p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-10 h-10 border flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition border-gray-200 dark:border-white/20 text-gray-600 dark:text-gray-400">
+                            <i data-lucide="facebook" class="w-4 h-4"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 border flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition border-gray-200 dark:border-white/20 text-gray-600 dark:text-gray-400">
+                            <i data-lucide="instagram" class="w-4 h-4"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 border flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition border-gray-200 dark:border-white/20 text-gray-600 dark:text-gray-400">
+                            <i data-lucide="youtube" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-sm uppercase tracking-[3px] mb-6 text-primary">द्रुत लिंकहरू</h4>
+                    <ul class="space-y-3">
+                        <li><a href="{% url 'index' %}" class="hover:text-primary hover:pl-2 transition-all text-gray-600 dark:text-gray-400">गृहपृष्ठ</a></li>
+                        <li><a href="{% url 'news' %}" class="hover:text-primary hover:pl-2 transition-all text-gray-600 dark:text-gray-400">समाचार</a></li>
+                        <li><a href="{% url 'bod' %}" class="hover:text-primary hover:pl-2 transition-all text-gray-600 dark:text-gray-400">सञ्चालक समिति</a></li>
+                        <li><a href="{% url 'staff' %}" class="hover:text-primary hover:pl-2 transition-all text-gray-600 dark:text-gray-400">हाम्रो कर्मचारीहरु</a></li>
+                        <li><a href="{% url 'gallery' %}" class="hover:text-primary hover:pl-2 transition-all text-gray-600 dark:text-gray-400">ग्यालेरी</a></li>
+                        <li><a href="{% url 'report' %}" class="hover:text-primary hover:pl-2 transition-all text-gray-600 dark:text-gray-400">रिपोर्टहरू</a></li>
+                        <li><a href="{% url 'contact' %}" class="hover:text-primary hover:pl-2 transition-all text-gray-600 dark:text-gray-400">सम्पर्क</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-sm uppercase tracking-[3px] mb-6 text-primary">सम्पर्क</h4>
+                    <ul class="space-y-4 text-sm text-gray-600 dark:text-gray-400">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0"></i>
+                            <span>सुक्र पथ, न्यू रोड<br>काठमाडौं 44600, नेपाल</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="phone" class="w-5 h-5 text-primary flex-shrink-0"></i>
+                            <span>01-5342185, 01-5322423</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="mail" class="w-5 h-5 text-primary flex-shrink-0"></i>
+                            <span>info@bishalbazar.com.np</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Map -->
+                <div>
+                    <h4 class="text-sm uppercase tracking-[3px] mb-6 text-primary">नक्सा</h4>
+                    <div class="border overflow-hidden border-gray-200 dark:border-white/10">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.4236067554684!2d85.30927239374269!3d27.704204344063793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb1855ed14f2ef%3A0x4f0c32c8749bbfc6!2sBishal%20Bazar%2C%20Kathmandu%2044600!5e0!3m2!1sen!2snp!4v1643818717276!5m2!1sen!2snp" class="w-full h-40" style="border:0; filter: grayscale(100%);" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm border-gray-200 dark:border-white/5 text-gray-500 dark:text-gray-600">
+                <p>&copy; 2025 बिशाल बजार कम्पनी लिमिटेड। सर्वाधिकार सुरक्षित।</p>
+                <p class="flex items-center gap-1">Made with <i data-lucide="heart" class="w-4 h-4 text-primary fill-primary"></i> in Nepal</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <button id="backToTop" class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-white flex items-center justify-center opacity-0 invisible transition-all duration-500 z-40 hover:bg-red-700">
+        <i data-lucide="arrow-up" class="w-5 h-5"></i>
+    </button>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Top Bar Preloader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('topLoader').classList.add('complete');
+            }, 800);
+            lucide.createIcons();
+        });
+
+        // Theme Management
+        function setTheme(theme) {
+            document.documentElement.classList.remove('light', 'dark');
+            document.documentElement.classList.add(theme);
+            localStorage.setItem('theme', theme);
+            lucide.createIcons();
+        }
+
+        function toggleTheme() {
+            const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+            setTheme(newTheme);
+        }
+
+        // Initialize theme - Default to light
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.classList.add(savedTheme);
+        })();
+
+        // Dropdown Toggle
+        function toggleDropdown(menuId) {
+            const menu = document.getElementById(menuId);
+            const icon = document.getElementById('aboutIcon');
+            
+            if (menu.classList.contains('opacity-0')) {
+                menu.classList.remove('opacity-0', 'invisible', '-translate-y-4');
+                menu.classList.add('opacity-100', 'visible', 'translate-y-0');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                menu.classList.add('opacity-0', 'invisible', '-translate-y-4');
+                menu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('aboutDropdown');
+            const menu = document.getElementById('aboutMenu');
+            
+            if (dropdown && !dropdown.contains(e.target)) {
+                menu.classList.add('opacity-0', 'invisible', '-translate-y-4');
+                menu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+                document.getElementById('aboutIcon').style.transform = 'rotate(0deg)';
+            }
+        });
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const line1 = document.getElementById('menuLine1');
+            const line2 = document.getElementById('menuLine2');
+            const line3 = document.getElementById('menuLine3');
+
+            menu.classList.toggle('translate-x-full');
+            menu.classList.toggle('translate-x-0');
+
+            if (!menu.classList.contains('translate-x-full')) {
+                line1.style.transform = 'rotate(45deg) translateY(6px)';
+                line2.style.opacity = '0';
+                line3.style.transform = 'rotate(-45deg) translateY(-6px)';
+                line3.style.width = '24px';
+            } else {
+                line1.style.transform = 'none';
+                line2.style.opacity = '1';
+                line3.style.transform = 'none';
+                line3.style.width = '16px';
+            }
+        }
+
+        // Mobile Dropdown
+        function toggleMobileDropdown() {
+            const menu = document.getElementById('mobileDropdownMenu');
+            const icon = document.getElementById('mobileDropdownIcon');
+            
+            menu.classList.toggle('hidden');
+            icon.setAttribute('data-lucide', menu.classList.contains('hidden') ? 'plus' : 'minus');
+            lucide.createIcons();
+        }
+
+        // Back to Top
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                backToTop.classList.remove('opacity-0', 'invisible');
+                backToTop.classList.add('opacity-100', 'visible');
+            } else {
+                backToTop.classList.add('opacity-0', 'invisible');
+                backToTop.classList.remove('opacity-100', 'visible');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Reveal Animation
+        const reveals = document.querySelectorAll('.reveal');
+        const revealOnScroll = () => {
+            reveals.forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 150) {
+                    el.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll);
+    </script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}हाम्रो कर्मचारीहरु - Bishal Bazar{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="py-20 px-4 md:px-8 lg:px-16 border-b border-gray-100 dark:border-white/5">
+    <div class="container mx-auto text-center">
+        <p class="text-primary text-sm uppercase tracking-[5px] mb-4 reveal">हाम्रो टोली</p>
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold reveal text-gray-800 dark:text-white">
+            हाम्रो <span class="text-stroke">कर्मचारीहरु</span>
+        </h1>
+        <p class="mt-6 max-w-2xl mx-auto reveal text-gray-500 dark:text-gray-400">
+            बिशाल बजार कम्पनीमा कार्यरत समर्पित र अनुभवी कर्मचारीहरू जसले तपाईंको सेवामा सधैं तत्पर छन्।
+        </p>
+        
+        <!-- Stats -->
+        {% if total_employees %}
+        <div class="mt-10 reveal">
+            <div class="inline-flex items-center gap-4 px-8 py-4 bg-primary text-white">
+                <i data-lucide="users" class="w-8 h-8"></i>
+                <div class="text-left">
+                    <p class="text-3xl font-bold">{{ total_employees }}</p>
+                    <p class="text-sm opacity-80">कुल कर्मचारी</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Employee Table Section -->
+<section class="py-20 px-4 md:px-8 lg:px-16">
+    <div class="container mx-auto">
+        {% if employees %}
+        <div class="reveal overflow-hidden border border-gray-200 dark:border-white/10">
+            <!-- Table Header -->
+            <div class="bg-primary text-white">
+                <div class="grid grid-cols-12 gap-4 px-6 py-5">
+                    <div class="col-span-1 text-sm font-bold uppercase tracking-wider">
+                        क्र.सं.
+                    </div>
+                    <div class="col-span-2 text-sm font-bold uppercase tracking-wider">
+                        फोटो
+                    </div>
+                    <div class="col-span-5 text-sm font-bold uppercase tracking-wider">
+                        नाम
+                    </div>
+                    <div class="col-span-4 text-sm font-bold uppercase tracking-wider">
+                        पद
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Body -->
+            <div class="divide-y divide-gray-100 dark:divide-white/5">
+                {% for employee in employees %}
+                <div class="grid grid-cols-12 gap-4 px-6 py-4 items-center bg-white dark:bg-zinc-900 hover:bg-gray-50 dark:hover:bg-zinc-800 transition group">
+                    <!-- Serial Number -->
+                    <div class="col-span-1">
+                        <span class="w-10 h-10 bg-primary/10 text-primary font-bold flex items-center justify-center group-hover:bg-primary group-hover:text-white transition">
+                            {{ forloop.counter }}
+                        </span>
+                    </div>
+                    
+                    <!-- Photo -->
+                    <div class="col-span-2">
+                        <div class="w-16 h-16 overflow-hidden border-2 border-gray-200 dark:border-white/10 group-hover:border-primary transition">
+                            {% if employee.employee_image %}
+                            <img src="{{ employee.employee_image.url }}" alt="{{ employee.employee_name }}" 
+                                 class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500">
+                            {% else %}
+                            <div class="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                                <i data-lucide="user" class="w-8 h-8 text-gray-300 dark:text-white/20"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Name -->
+                    <div class="col-span-5">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white group-hover:text-primary transition">
+                            {{ employee.employee_name }}
+                        </h3>
+                    </div>
+                    
+                    <!-- Designation -->
+                    <div class="col-span-4">
+                        <span class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-zinc-800 text-gray-700 dark:text-gray-300 text-sm group-hover:bg-primary group-hover:text-white transition">
+                            <i data-lucide="briefcase" class="w-4 h-4"></i>
+                            {{ employee.employee_designation }}
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Mobile View (Card Layout) -->
+        <div class="lg:hidden mt-8 space-y-4">
+            {% for employee in employees %}
+            <div class="reveal border border-gray-200 dark:border-white/10 bg-white dark:bg-zinc-900 p-6" style="transition-delay: {{ forloop.counter0 }}00ms;">
+                <div class="flex items-center gap-4">
+                    <!-- Number Badge -->
+                    <div class="w-10 h-10 bg-primary text-white font-bold flex items-center justify-center flex-shrink-0">
+                        {{ forloop.counter }}
+                    </div>
+                    
+                    <!-- Photo -->
+                    <div class="w-20 h-20 overflow-hidden border-2 border-primary flex-shrink-0">
+                        {% if employee.employee_image %}
+                        <img src="{{ employee.employee_image.url }}" alt="{{ employee.employee_name }}" 
+                             class="w-full h-full object-cover">
+                        {% else %}
+                        <div class="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                            <i data-lucide="user" class="w-10 h-10 text-gray-300 dark:text-white/20"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Info -->
+                    <div class="flex-1 min-w-0">
+                        <h3 class="text-lg font-bold text-gray-800 dark:text-white truncate">
+                            {{ employee.employee_name }}
+                        </h3>
+                        <p class="text-primary text-sm font-medium mt-1">
+                            {{ employee.employee_designation }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% else %}
+        <!-- No Employees -->
+        <div class="text-center py-20 reveal">
+            <div class="w-32 h-32 mx-auto mb-8 bg-gray-100 dark:bg-zinc-800 flex items-center justify-center">
+                <i data-lucide="users" class="w-16 h-16 text-gray-300 dark:text-gray-600"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">कर्मचारी उपलब्ध छैन</h3>
+            <p class="text-gray-500 dark:text-gray-400 max-w-md mx-auto">
+                हाल कर्मचारी विवरण अपलोड गरिएको छैन। कृपया पछि पुन: हेर्नुहोस्।
+            </p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Alternative: Card Grid View -->
+{% if employees %}
+<section class="py-20 px-4 md:px-8 lg:px-16 bg-gray-50 dark:bg-zinc-900/50">
+    <div class="container mx-auto">
+        <div class="text-center mb-12 reveal">
+            <p class="text-primary text-sm uppercase tracking-[5px] mb-4">ग्रिड भ्यू</p>
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">
+                हाम्रो टोली
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {% for employee in employees %}
+            <div class="reveal card-hover bg-white dark:bg-zinc-900 border border-gray-100 dark:border-white/5 overflow-hidden group" style="transition-delay: {{ forloop.counter0 }}50ms;">
+                <!-- Image -->
+                <div class="relative h-56 overflow-hidden">
+                    {% if employee.employee_image %}
+                    <img src="{{ employee.employee_image.url }}" alt="{{ employee.employee_name }}" 
+                         class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700 group-hover:scale-110">
+                    {% else %}
+                    <div class="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                        <i data-lucide="user" class="w-20 h-20 text-gray-300 dark:text-white/10"></i>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Number Badge -->
+                    <div class="absolute top-4 left-4 w-10 h-10 bg-primary text-white font-bold flex items-center justify-center">
+                        {{ forloop.counter }}
+                    </div>
+                    
+                    <!-- Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                </div>
+
+                <!-- Info -->
+                <div class="p-6 text-center">
+                    <div class="w-12 h-0.5 bg-primary mx-auto mb-4"></div>
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-white group-hover:text-primary transition">
+                        {{ employee.employee_name }}
+                    </h3>
+                    <p class="text-primary text-sm uppercase tracking-wider mt-2">
+                        {{ employee.employee_designation }}
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Back Button -->
+<section class="py-20 px-4 md:px-8 lg:px-16">
+    <div class="container mx-auto text-center">
+        <a href="{% url 'index' %}" class="inline-flex items-center gap-4 px-10 py-5 border uppercase tracking-wider text-sm hover:bg-primary hover:border-primary hover:text-white transition group border-gray-300 dark:border-white/30 text-gray-700 dark:text-white">
+            <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-2 transition"></i>
+            गृहपृष्ठमा फर्कनुहोस्
+        </a>
+    </div>
+</section>
+
+<style>
+    /* Hide table on mobile, show cards */
+    @media (max-width: 1023px) {
+        .lg\:hidden + .lg\:hidden {
+            display: block;
+        }
+        .container > .reveal.overflow-hidden {
+            display: none;
+        }
+    }
+    
+    /* Show table on desktop, hide mobile cards */
+    @media (min-width: 1024px) {
+        .lg\:hidden {
+            display: none !important;
+        }
+    }
+</style>
+{% endblock %}

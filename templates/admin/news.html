@@ -1,0 +1,186 @@
+{% extends 'admin/_base.html' %}
+{% load static %}
+{% block title %}समाचार{% endblock %}
+
+{% block breadcrumb %}
+<span class="text-gray-400">/</span>
+<span class="text-gray-700 font-medium">समाचार</span>
+{% endblock %}
+
+{% block content %}
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 fade-up">
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900">समाचार</h1>
+        <p class="text-gray-500 text-sm mt-1">वेबसाइटमा देखिने समाचार तथा जानकारी व्यवस्थापन गर्नुहोस्।</p>
+    </div>
+    <button onclick="openCreateModal()" class="flex items-center gap-2 px-4 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition shadow-sm text-sm font-medium">
+        <i data-lucide="plus" class="w-4 h-4"></i> नयाँ थप्नुहोस्
+    </button>
+</div>
+
+<div class="admin-table-container fade-up shadow-sm">
+    {% if items %}
+    <div class="overflow-x-auto">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th class="w-16 text-center">सि.नं.</th>
+                    <th>तस्वीर</th>
+                    <th>शीर्षक</th>
+                    <th>प्रकाशन मिति</th>
+                    <th class="text-right w-32 pr-6">कार्यहरू</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr id="row-news-{{ item.id }}">
+                    <td class="text-center text-gray-400 font-medium">{{ forloop.counter }}</td>
+                    <td>
+                        {% if item.news_image %}
+                        <img src="{{ item.news_image.url }}" class="w-14 h-10 object-cover rounded-md border border-gray-100 shadow-sm">
+                        {% else %}
+                        <div class="w-14 h-10 bg-gray-50 border border-gray-100 rounded-md flex items-center justify-center text-gray-300">
+                            <i data-lucide="image-off" class="w-5 h-5"></i>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <p class="font-medium text-gray-900">{{ item.news_title }}</p>
+                        <p class="text-gray-500 text-xs mt-0.5 max-w-sm truncate">{{ item.news_descriptions|default:"विवरण छैन" }}</p>
+                    </td>
+                    <td class="text-gray-500 text-sm whitespace-nowrap">{{ item.created_at|date:"Y M d" }}</td>
+                    <td class="text-right pr-6">
+                        <div class="flex items-center justify-end gap-2">
+                            <button onclick="openEditModal({{ item.id }}, '{{ item.news_title|escapejs }}', '{{ item.news_descriptions|default:''|escapejs }}')"
+                                class="p-2 text-blue-600 hover:bg-blue-50 border border-transparent hover:border-blue-200 rounded-lg transition">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="confirmDelete({{ item.id }})"
+                                class="p-2 text-red-600 hover:bg-red-50 border border-transparent hover:border-red-200 rounded-lg transition">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="text-center py-20 px-4">
+        <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100">
+            <i data-lucide="file-text" class="w-8 h-8 text-gray-400"></i>
+        </div>
+        <h3 class="text-gray-900 font-semibold mb-1">कुनै समाचार छैन</h3>
+        <p class="text-gray-500 text-sm mb-6">तपाईंले अहिलेसम्म कुनै पनि समाचार थप्नुभएको छैन।</p>
+        <button onclick="openCreateModal()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition font-medium text-sm">
+            <i data-lucide="plus" class="w-4 h-4"></i> समाचार थप्नुहोस्
+        </button>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Create Modal -->
+<div class="modal-backdrop" id="createModal">
+    <div class="modal-box">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+            <h2 class="font-bold text-gray-900 text-lg flex items-center gap-2">नयाँ समाचार थप्नुहोस्</h2>
+            <button onclick="closeCreateModal()" class="text-gray-400 hover:text-gray-700 transition bg-gray-50 hover:bg-gray-100 p-1.5 rounded-lg"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        <form id="createForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="space-y-5">
+                <div>
+                    <label class="form-label">शीर्षक <span class="text-red-500">*</span></label>
+                    <input type="text" name="news_title" placeholder="समाचारको मुख्य शीर्षक" required class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">विवरण</label>
+                    <textarea name="news_descriptions" rows="4" placeholder="समाचारको पूरा विवरण लेख्नुहोस्..." class="form-input resize-y"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="form-label">मुख्य तस्वीर</label>
+                        <input type="file" name="news_image" accept="image/*" class="w-full text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 transition cursor-pointer border border-gray-200 rounded-lg p-1 bg-gray-50">
+                    </div>
+                    <div>
+                        <label class="form-label">संलग्नक (PDF आदि)</label>
+                        <input type="file" name="attachments" class="w-full text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 transition cursor-pointer border border-gray-200 rounded-lg p-1 bg-gray-50">
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3 justify-end mt-8 pt-4 border-t border-gray-100">
+                <button type="button" onclick="closeCreateModal()" class="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium text-sm">रद्द</button>
+                <button type="submit" class="px-5 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition shadow-sm font-medium text-sm flex items-center gap-2">सुरक्षित गर्नुहोस्</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal-backdrop" id="editModal">
+    <div class="modal-box">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+            <h2 class="font-bold text-gray-900 text-lg flex items-center gap-2">समाचार सम्पादन</h2>
+            <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-700 transition bg-gray-50 hover:bg-gray-100 p-1.5 rounded-lg"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        <form id="editForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" id="editId">
+            <div class="space-y-5">
+                <div>
+                    <label class="form-label">शीर्षक <span class="text-red-500">*</span></label>
+                    <input type="text" name="news_title" id="editTitle" required class="form-input">
+                </div>
+                <div>
+                    <label class="form-label">विवरण</label>
+                    <textarea name="news_descriptions" id="editDesc" rows="4" class="form-input resize-y"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="form-label">नयाँ तस्वीर <span class="text-gray-400 text-xs font-normal ml-1">(ऐच्छिक)</span></label>
+                        <input type="file" name="news_image" accept="image/*" class="w-full text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 transition cursor-pointer border border-gray-200 rounded-lg p-1 bg-gray-50">
+                    </div>
+                    <div>
+                        <label class="form-label">नयाँ संलग्नक <span class="text-gray-400 text-xs font-normal ml-1">(ऐच्छिक)</span></label>
+                        <input type="file" name="attachments" class="w-full text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 transition cursor-pointer border border-gray-200 rounded-lg p-1 bg-gray-50">
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3 justify-end mt-8 pt-4 border-t border-gray-100">
+                <button type="button" onclick="closeEditModal()" class="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium text-sm">रद्द</button>
+                <button type="submit" class="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm font-medium text-sm flex items-center gap-2">परिवर्तन सुरक्षित गर्नुहोस्</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+function openCreateModal() { document.getElementById('createModal').classList.add('active'); }
+function closeCreateModal() { document.getElementById('createModal').classList.remove('active'); document.getElementById('createForm').reset(); }
+function openEditModal(id, title, desc) {
+    document.getElementById('editId').value = id;
+    document.getElementById('editTitle').value = title;
+    document.getElementById('editDesc').value = desc;
+    document.getElementById('editModal').classList.add('active');
+}
+function closeEditModal() { document.getElementById('editModal').classList.remove('active'); }
+function confirmDelete(id) {
+    openDeleteModal(() => {
+        adminFetch(`/admin/news/${id}/delete/`, new FormData(), () => {
+            document.getElementById(`row-news-${id}`)?.remove();
+            if (document.querySelectorAll('tbody tr').length === 0) location.reload();
+        });
+    });
+}
+document.getElementById('createForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    adminFetch('{% url "admin_news_create" %}', new FormData(this), () => { closeCreateModal(); location.reload(); });
+});
+document.getElementById('editForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const id = document.getElementById('editId').value;
+    adminFetch(`/admin/news/${id}/update/`, new FormData(this), () => { closeEditModal(); location.reload(); });
+});
+{% endblock %}

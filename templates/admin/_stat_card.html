@@ -1,0 +1,15 @@
+<a href="{% url link %}" class="relative bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden">
+    <!-- Decorator Circle -->
+    <div class="absolute -top-6 -right-6 w-24 h-24 bg-{{ color }}-50 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+    
+    <div class="relative flex flex-col gap-4">
+        <div class="w-12 h-12 rounded-xl bg-{{ color }}-50 flex items-center justify-center text-{{ color }}-600 group-hover:bg-{{ color }}-600 group-hover:text-white transition-colors duration-300 shadow-sm">
+            <i data-lucide="{{ icon }}" class="w-6 h-6"></i>
+        </div>
+        
+        <div>
+            <p class="text-3xl font-black text-gray-900 group-hover:translate-x-1 transition-transform">{{ count }}</p>
+            <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mt-1">{{ label }}</p>
+        </div>
+    </div>
+</a>

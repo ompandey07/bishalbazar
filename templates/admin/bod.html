@@ -1,0 +1,196 @@
+{% extends 'admin/_base.html' %}
+{% load static %}
+{% block title %}सञ्चालक समिति{% endblock %}
+
+{% block breadcrumb %}
+<span class="text-gray-400">/</span>
+<span class="text-gray-700 font-medium">सञ्चालक समिति</span>
+{% endblock %}
+
+{% block content %}
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 fade-up">
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900">सञ्चालक समिति (BOD)</h1>
+        <p class="text-gray-500 text-sm mt-1">कम्पनीका सञ्चालक समितिका सदस्यहरूको जानकारी व्यवस्थापन गर्नुहोस्।</p>
+    </div>
+    <button onclick="openCreateModal()" class="flex items-center gap-2 px-4 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition shadow-sm text-sm font-medium">
+        <i data-lucide="plus" class="w-4 h-4"></i> नयाँ सदस्य थप्नुहोस्
+    </button>
+</div>
+
+<div class="admin-table-container fade-up shadow-sm">
+    {% if items %}
+    <div class="overflow-x-auto">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th class="w-16 text-center">सि.नं.</th>
+                    <th>तस्वीर</th>
+                    <th>नाम</th>
+                    <th>पद</th>
+                    <th>सिर्जना मिति</th>
+                    <th class="text-right w-32 pr-6">कार्यहरू</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr id="row-bod-{{ item.id }}">
+                    <td class="text-center text-gray-400 font-medium">{{ forloop.counter }}</td>
+                    <td>
+                        <div class="relative w-11 h-11">
+                            {% if item.bod_image %}
+                            <img src="{{ item.bod_image.url }}" class="w-11 h-11 rounded-full object-cover border-2 border-gray-100 shadow-sm">
+                            {% else %}
+                            <div class="w-11 h-11 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 font-bold border-2 border-gray-100 shadow-sm">
+                                {{ item.bod_name|slice:":1" }}
+                            </div>
+                            {% endif %}
+                            <div class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></div>
+                        </div>
+                    </td>
+                    <td class="font-semibold text-gray-900">{{ item.bod_name }}</td>
+                    <td>
+                        <span class="px-2.5 py-1 bg-red-50 text-red-600 text-xs font-bold rounded-full border border-red-100 uppercase tracking-tight">
+                            {{ item.bod_designation }}
+                        </span>
+                    </td>
+                    <td class="text-gray-500 text-sm whitespace-nowrap">{{ item.created_at|date:"Y M d" }}</td>
+                    <td class="text-right pr-6">
+                        <div class="flex items-center justify-end gap-2">
+                            <button onclick="openEditModal({{ item.id }}, '{{ item.bod_name|escapejs }}', '{{ item.bod_designation|escapejs }}')"
+                                class="p-2 text-blue-600 hover:bg-blue-50 border border-transparent hover:border-blue-200 rounded-lg transition" title="सम्पादन">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="confirmDelete({{ item.id }})"
+                                class="p-2 text-red-600 hover:bg-red-50 border border-transparent hover:border-red-200 rounded-lg transition" title="मेटाउनुहोस्">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="text-center py-20 px-4">
+        <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100">
+            <i data-lucide="users" class="w-8 h-8 text-gray-400"></i>
+        </div>
+        <h3 class="text-gray-900 font-semibold mb-1">कुनै सञ्चालक छैनन्</h3>
+        <p class="text-gray-500 text-sm mb-6">तपाईंले अहिलेसम्म सञ्चालक समितिको कुनै सदस्य थप्नुभएको छैन।</p>
+        <button onclick="openCreateModal()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition font-medium text-sm">
+            <i data-lucide="plus" class="w-4 h-4"></i> सदस्य थप्नुहोस्
+        </button>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Create Modal -->
+<div class="modal-backdrop" id="createModal">
+    <div class="modal-box">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+            <h2 class="font-bold text-gray-900 text-lg flex items-center gap-2">नयाँ सदस्य थप्नुहोस्</h2>
+            <button onclick="closeCreateModal()" class="text-gray-400 hover:text-gray-700 transition bg-gray-50 hover:bg-gray-100 p-1.5 rounded-lg"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        <form id="createForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="space-y-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="form-label">नाम <span class="text-red-500">*</span></label>
+                        <input type="text" name="bod_name" placeholder="पुरा नाम" required class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label">पद <span class="text-red-500">*</span></label>
+                        <input type="text" name="bod_designation" placeholder="जस्तै: अध्यक्ष" required class="form-input">
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label">फोटो अपलोड</label>
+                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-200 border-dashed rounded-lg bg-gray-50 hover:bg-gray-100 transition cursor-pointer relative overflow-hidden group">
+                        <input type="file" name="bod_image" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                        <div class="space-y-1 text-center">
+                            <i data-lucide="user" class="mx-auto h-10 w-10 text-gray-400 group-hover:text-red-500 transition"></i>
+                            <div class="flex text-sm text-gray-600 justify-center">
+                                <span class="relative cursor-pointer rounded-md font-medium text-red-600 hover:text-red-500">फोटो छान्नुहोस्</span>
+                                <p class="pl-1">वा यहाँ तान्नुहोस्</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3 justify-end mt-8 pt-4 border-t border-gray-100">
+                <button type="button" onclick="closeCreateModal()" class="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium text-sm">रद्द</button>
+                <button type="submit" class="px-5 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition shadow-sm font-medium text-sm flex items-center gap-2">सुरक्षित गर्नुहोस्</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal-backdrop" id="editModal">
+    <div class="modal-box">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+            <h2 class="font-bold text-gray-900 text-lg flex items-center gap-2">सदस्य विवरण सम्पादन</h2>
+            <button onclick="closeEditModal()" class="text-gray-400 hover:text-gray-700 transition bg-gray-50 hover:bg-gray-100 p-1.5 rounded-lg"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+        <form id="editForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" id="editId">
+            <div class="space-y-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="form-label">नाम <span class="text-red-500">*</span></label>
+                        <input type="text" name="bod_name" id="editName" required class="form-input">
+                    </div>
+                    <div>
+                        <label class="form-label">पद <span class="text-red-500">*</span></label>
+                        <input type="text" name="bod_designation" id="editDesignation" required class="form-input">
+                    </div>
+                </div>
+                <div>
+                    <label class="form-label flex justify-between">
+                        <span>नयाँ फोटो</span>
+                        <span class="text-gray-400 text-xs font-normal">ऐच्छिक (परिवर्तन नगर्ने भए खाली छोड्नुहोस्)</span>
+                    </label>
+                    <input type="file" name="bod_image" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition cursor-pointer border border-gray-200 rounded-lg bg-gray-50 p-1">
+                </div>
+            </div>
+            <div class="flex gap-3 justify-end mt-8 pt-4 border-t border-gray-100">
+                <button type="button" onclick="closeEditModal()" class="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium text-sm">रद्द</button>
+                <button type="submit" class="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm font-medium text-sm flex items-center gap-2">परिवर्तन सुरक्षित गर्नुहोस्</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+function openCreateModal() { document.getElementById('createModal').classList.add('active'); }
+function closeCreateModal() { document.getElementById('createModal').classList.remove('active'); document.getElementById('createForm').reset(); }
+function openEditModal(id, name, designation) {
+    document.getElementById('editId').value = id;
+    document.getElementById('editName').value = name;
+    document.getElementById('editDesignation').value = designation;
+    document.getElementById('editModal').classList.add('active');
+}
+function closeEditModal() { document.getElementById('editModal').classList.remove('active'); }
+function confirmDelete(id) {
+    openDeleteModal(() => {
+        adminFetch(`/admin/bod/${id}/delete/`, new FormData(), () => {
+            document.getElementById(`row-bod-${id}`)?.remove();
+            if (document.querySelectorAll('tbody tr').length === 0) location.reload();
+        });
+    });
+}
+document.getElementById('createForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    adminFetch('{% url "admin_bod_create" %}', new FormData(this), () => { closeCreateModal(); location.reload(); });
+});
+document.getElementById('editForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const id = document.getElementById('editId').value;
+    adminFetch(`/admin/bod/${id}/update/`, new FormData(this), () => { closeEditModal(); location.reload(); });
+});
+{% endblock %}

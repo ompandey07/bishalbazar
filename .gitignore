@@ -1,0 +1,47 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+env/
+venv/
+ENV/
+
+# Django / Python
+*.log
+*.pot
+*.pyc
+*.pyo
+*.db
+*.sqlite
+*.sqlite3
+db.sqlite3
+*.db-journal
+
+# Django migrations
+*/migrations/*.py
+*/migrations/*.pyc
+*/migrations/__pycache__/
+
+# Media / uploads
+media/
+uploads/
+
+# IDEs / editors
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Others
+*.env
+*.bak
+*.swp
+build/
+dist/

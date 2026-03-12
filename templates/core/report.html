@@ -1,0 +1,60 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}रिपोर्टहरू - Bishal Bazar{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="py-20 px-4 md:px-8 lg:px-16 border-b border-gray-100 dark:border-white/5">
+    <div class="container mx-auto text-center">
+        <p class="text-primary text-sm uppercase tracking-[5px] mb-4 reveal">डाउनलोड</p>
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold reveal text-gray-800 dark:text-white">रिपोर्ट <span class="text-stroke">तथा कागजातहरू</span></h1>
+        <p class="mt-6 max-w-2xl mx-auto reveal text-gray-500 dark:text-gray-400">बिशाल बजार कम्पनीका आधिकारिक कागजात तथा रिपोर्टहरू</p>
+    </div>
+</section>
+
+<!-- Downloads Grid -->
+<section class="py-20 px-4 md:px-8 lg:px-16">
+    <div class="container mx-auto max-w-5xl">
+        <div class="space-y-4">
+            {% for download in downloads %}
+            <div class="reveal flex flex-col md:flex-row md:items-center gap-4 p-6 border bg-white dark:bg-zinc-900 border-gray-100 dark:border-white/5 group hover:border-primary transition" style="transition-delay: {{ forloop.counter0 }}00ms;">
+                <div class="w-16 h-16 bg-primary/10 flex items-center justify-center group-hover:bg-primary transition flex-shrink-0">
+                    <i data-lucide="file-text" class="w-8 h-8 text-primary group-hover:text-white transition"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-lg font-bold mb-1 text-gray-800 dark:text-white group-hover:text-primary transition">{{ download.download_title }}</h3>
+                    <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                        <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-4 h-4"></i>{{ download.created_at|date:"M d, Y" }}</span>
+                        <span class="flex items-center gap-1"><i data-lucide="file" class="w-4 h-4"></i>PDF</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 flex-shrink-0">
+                    <a href="{{ download.download_file.url }}" target="_blank" class="flex items-center gap-2 px-5 py-3 border border-gray-200 dark:border-white/10 hover:border-primary hover:text-primary transition text-sm uppercase tracking-wider">
+                        <i data-lucide="eye" class="w-4 h-4"></i><span class="hidden sm:inline">हेर्नुहोस्</span>
+                    </a>
+                    <a href="{{ download.download_file.url }}" download class="flex items-center gap-2 px-5 py-3 bg-primary text-white hover:bg-red-700 transition text-sm uppercase tracking-wider">
+                        <i data-lucide="download" class="w-4 h-4"></i><span class="hidden sm:inline">डाउनलोड</span>
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-20">
+                <i data-lucide="folder-open" class="w-20 h-20 mx-auto mb-6 text-gray-300 dark:text-gray-700"></i>
+                <p class="text-gray-500 dark:text-gray-400 text-xl">कागजात उपलब्ध छैन</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Back Button -->
+<section class="pb-20 px-4 md:px-8 lg:px-16">
+    <div class="container mx-auto text-center">
+        <a href="{% url 'index' %}" class="inline-flex items-center gap-4 px-10 py-5 border uppercase tracking-wider text-sm hover:bg-primary hover:border-primary hover:text-white transition group border-gray-300 dark:border-white/30 text-gray-700 dark:text-white">
+            <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-2 transition"></i>
+            गृहपृष्ठमा फर्कनुहोस्
+        </a>
+    </div>
+</section>
+{% endblock %}

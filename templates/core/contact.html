@@ -1,0 +1,108 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}सम्पर्क - Bishal Bazar{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="py-20 px-4 md:px-8 lg:px-16 border-b border-gray-100 dark:border-white/5">
+    <div class="container mx-auto text-center">
+        <p class="text-primary text-sm uppercase tracking-[5px] mb-4 reveal">हामीलाई सम्पर्क गर्नुहोस्</p>
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold reveal text-gray-800 dark:text-white">सम्पर्क <span class="text-stroke">विवरण</span></h1>
+        <p class="mt-6 max-w-2xl mx-auto reveal text-gray-500 dark:text-gray-400">हामी तपाईंको सेवामा छौं। कुनै पनि प्रश्न वा सुझावको लागि हामीलाई सम्पर्क गर्नुहोस्।</p>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-20 px-4 md:px-8 lg:px-16">
+    <div class="container mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            <!-- Contact Info -->
+            <div class="reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-8 text-gray-800 dark:text-white">हाम्रो कार्यालय</h2>
+                <div class="space-y-6">
+                    <div class="flex gap-6 p-6 border border-gray-100 dark:border-white/5 bg-white dark:bg-zinc-900 group hover:border-primary transition">
+                        <div class="w-16 h-16 bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary transition">
+                            <i data-lucide="map-pin" class="w-8 h-8 text-primary group-hover:text-white transition"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold mb-2 text-gray-800 dark:text-white">ठेगाना</h3>
+                            <p class="text-gray-600 dark:text-gray-400">सुक्र पथ, न्यू रोड<br>काठमाडौं 44600, नेपाल</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6 p-6 border border-gray-100 dark:border-white/5 bg-white dark:bg-zinc-900 group hover:border-primary transition">
+                        <div class="w-16 h-16 bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary transition">
+                            <i data-lucide="phone" class="w-8 h-8 text-primary group-hover:text-white transition"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold mb-2 text-gray-800 dark:text-white">फोन नम्बर</h3>
+                            <p class="text-gray-600 dark:text-gray-400">
+                                <a href="tel:01-5342185" class="hover:text-primary transition">01-5342185</a><br>
+                                <a href="tel:01-5322423" class="hover:text-primary transition">01-5322423</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6 p-6 border border-gray-100 dark:border-white/5 bg-white dark:bg-zinc-900 group hover:border-primary transition">
+                        <div class="w-16 h-16 bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary transition">
+                            <i data-lucide="mail" class="w-8 h-8 text-primary group-hover:text-white transition"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold mb-2 text-gray-800 dark:text-white">इमेल</h3>
+                            <p class="text-gray-600 dark:text-gray-400">
+                                <a href="mailto:info@bishalbazar.com.np" class="hover:text-primary transition">info@bishalbazar.com.np</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6 p-6 border border-gray-100 dark:border-white/5 bg-white dark:bg-zinc-900 group hover:border-primary transition">
+                        <div class="w-16 h-16 bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary transition">
+                            <i data-lucide="clock" class="w-8 h-8 text-primary group-hover:text-white transition"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold mb-2 text-gray-800 dark:text-white">कार्यालय समय</h3>
+                            <p class="text-gray-600 dark:text-gray-400">
+                                आइतबार - शुक्रबार: बिहान १०:०० - साँझ ६:००<br>
+                                शनिबार: बिहान १०:०० - दिउँसो २:००
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-10">
+                    <h3 class="text-lg font-bold mb-4 text-gray-800 dark:text-white">हामीलाई फोलो गर्नुहोस्</h3>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-14 h-14 border border-gray-200 dark:border-white/10 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition text-gray-600 dark:text-gray-400"><i data-lucide="facebook" class="w-6 h-6"></i></a>
+                        <a href="#" class="w-14 h-14 border border-gray-200 dark:border-white/10 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition text-gray-600 dark:text-gray-400"><i data-lucide="instagram" class="w-6 h-6"></i></a>
+                        <a href="#" class="w-14 h-14 border border-gray-200 dark:border-white/10 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition text-gray-600 dark:text-gray-400"><i data-lucide="youtube" class="w-6 h-6"></i></a>
+                        <a href="#" class="w-14 h-14 border border-gray-200 dark:border-white/10 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition text-gray-600 dark:text-gray-400"><i data-lucide="twitter" class="w-6 h-6"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map -->
+            <div class="reveal" style="transition-delay: 0.2s;">
+                <h2 class="text-3xl md:text-4xl font-bold mb-8 text-gray-800 dark:text-white">हाम्रो स्थान</h2>
+                <div class="border border-gray-100 dark:border-white/5 overflow-hidden h-[400px] lg:h-[500px]">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.4236067554684!2d85.30927239374269!3d27.704204344063793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb1855ed14f2ef%3A0x4f0c32c8749bbfc6!2sBishal%20Bazar%2C%20Kathmandu%2044600!5e0!3m2!1sen!2snp!4v1643818717276!5m2!1sen!2snp" class="w-full h-full" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                <div class="mt-8 p-8 bg-primary text-white">
+                    <h3 class="text-2xl font-bold mb-4">बिशाल बजार कम्पनी लिमिटेड</h3>
+                    <p class="text-white/80 leading-relaxed">काठमाडौंको न्यू रोडमा अवस्थित बिशाल बजार कम्पनी नेपालको एक प्रमुख शपिङ कम्प्लेक्स हो। यहाँ विभिन्न प्रकारका पसलहरू र सेवाहरू उपलब्ध छन्।</p>
+                    <a href="https://maps.google.com/?q=Bishal+Bazar+Kathmandu" target="_blank" class="inline-flex items-center gap-2 mt-6 px-6 py-3 bg-white text-primary hover:bg-gray-100 transition text-sm uppercase tracking-wider font-bold">
+                        <i data-lucide="navigation" class="w-4 h-4"></i>
+                        दिशानिर्देश लिनुहोस्
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Back Button -->
+<section class="pb-20 px-4 md:px-8 lg:px-16">
+    <div class="container mx-auto text-center">
+        <a href="{% url 'index' %}" class="inline-flex items-center gap-4 px-10 py-5 border uppercase tracking-wider text-sm hover:bg-primary hover:border-primary hover:text-white transition group border-gray-300 dark:border-white/30 text-gray-700 dark:text-white">
+            <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-2 transition"></i>
+            गृहपृष्ठमा फर्कनुहोस्
+        </a>
+    </div>
+</section>
+{% endblock %}

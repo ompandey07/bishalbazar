@@ -1,0 +1,61 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}सञ्चालक समिति - Bishal Bazar{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="py-20 px-4 md:px-8 lg:px-16 border-b border-gray-100 dark:border-white/5">
+    <div class="container mx-auto text-center">
+        <p class="text-primary text-sm uppercase tracking-[5px] mb-4 reveal">नेतृत्व टोली</p>
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold reveal text-gray-800 dark:text-white">सञ्चालक <span class="text-stroke">समिति</span></h1>
+        <p class="mt-6 max-w-2xl mx-auto reveal text-gray-500 dark:text-gray-400">बिशाल बजार कम्पनीलाई उत्कृष्टता र वृद्धितर्फ अगाडि बढाउने दूरदर्शी नेताहरू</p>
+    </div>
+</section>
+
+<!-- Directors Grid -->
+<section class="py-20 px-4 md:px-8 lg:px-16">
+    <div class="container mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {% for member in bod_members %}
+            <div class="reveal card-hover group" style="transition-delay: {{ forloop.counter0 }}00ms;">
+                <div class="relative">
+                    <div class="aspect-[3/4] overflow-hidden">
+                        {% if member.bod_image %}
+                        <img src="{{ member.bod_image.url }}" alt="{{ member.bod_name }}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700 group-hover:scale-110">
+                        {% else %}
+                        <div class="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                            <i data-lucide="user" class="w-24 h-24 text-gray-300 dark:text-white/10"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 transform translate-y-4 group-hover:translate-y-0 transition duration-500 text-white">
+                        <div class="w-10 h-0.5 bg-primary mb-4 transform scale-x-0 group-hover:scale-x-100 transition duration-500"></div>
+                        <h3 class="text-xl font-bold mb-1">{{ member.bod_name }}</h3>
+                        <p class="text-primary text-sm uppercase tracking-wider">{{ member.bod_position }}</p>
+                    </div>
+                    <div class="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-primary opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                    <div class="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-primary opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-20">
+                <i data-lucide="users" class="w-20 h-20 mx-auto mb-6 text-gray-300 dark:text-gray-700"></i>
+                <p class="text-gray-500 dark:text-gray-400 text-xl">सञ्चालक उपलब्ध छैन</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Back Button -->
+<section class="pb-20 px-4 md:px-8 lg:px-16">
+    <div class="container mx-auto text-center">
+        <a href="{% url 'index' %}" class="inline-flex items-center gap-4 px-10 py-5 border uppercase tracking-wider text-sm hover:bg-primary hover:border-primary hover:text-white transition group border-gray-300 dark:border-white/30 text-gray-700 dark:text-white">
+            <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-2 transition"></i>
+            गृहपृष्ठमा फर्कनुहोस्
+        </a>
+    </div>
+</section>
+{% endblock %}

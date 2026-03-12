@@ -1,0 +1,376 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Animated Logo Preloader - ONLY ON INDEX PAGE -->
+<div id="indexPreloader" class="fixed inset-0 z-[99999] flex items-center justify-center bg-white dark:bg-zinc-950">
+    <div class="relative flex items-center justify-center">
+        <!-- Animated Rings -->
+        <div class="absolute w-40 h-40 border-2 border-primary/30 animate-spin" style="animation-duration: 3s;"></div>
+        <div class="absolute w-52 h-52 border border-primary/20 animate-spin" style="animation-direction: reverse; animation-duration: 4s;"></div>
+        <div class="absolute w-64 h-64 border border-primary/10 animate-spin" style="animation-duration: 5s;"></div>
+        
+        <!-- Pulse Rings -->
+        <div class="absolute w-32 h-32 border-2 border-primary rounded-full animate-ping" style="animation-duration: 1.5s;"></div>
+        <div class="absolute w-32 h-32 border-2 border-primary rounded-full animate-ping" style="animation-delay: 0.5s; animation-duration: 1.5s;"></div>
+        
+        <!-- Logo -->
+        <div class="relative z-10 animate-bounce" style="animation-duration: 1.5s;">
+            <img src="{% static 'bishal-bazar-logo.png' %}" alt="Bishal Bazar" class="h-24 w-auto">
+        </div>
+    </div>
+    
+    <!-- Loading Text -->
+    <div class="absolute bottom-20 left-1/2 -translate-x-1/2 text-center">
+        <div class="flex items-center gap-2 justify-center mb-4">
+            <div class="w-2 h-2 bg-primary rounded-full animate-bounce" style="animation-delay: 0s;"></div>
+            <div class="w-2 h-2 bg-primary rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
+            <div class="w-2 h-2 bg-primary rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+        </div>
+        <p class="text-sm uppercase tracking-[4px] text-gray-500">Loading</p>
+    </div>
+</div>
+
+<!-- Hero Banner -->
+<section class="pt-8 px-4 md:px-8 lg:px-16">
+    {% if banners and banners.images.all %}
+    <div class="relative">
+        <div class="relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden">
+            {% for image in banners.images.all %}
+            <div class="carousel-slide {% if forloop.first %}active{% endif %} absolute inset-0 opacity-0 transition-all duration-1000 ease-out">
+                <img src="{{ image.image.url }}" alt="{{ image.title }}" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
+                <div class="absolute top-8 left-8 right-8">
+                    <p class="text-primary text-sm uppercase tracking-[5px] mb-2">{{ banners.banner_title }}</p>
+                    <div class="w-20 h-0.5 bg-primary"></div>
+                </div>
+                <div class="absolute bottom-8 left-8 right-8 text-white">
+                    <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">{{ image.title }}</h1>
+                    <p class="text-gray-300 text-lg md:text-xl max-w-2xl">काठमाडौंको सबैभन्दा मनपर्ने शपिङ कम्प्लेक्स</p>
+                    <div class="flex items-center gap-4 mt-8">
+                        <span class="text-5xl font-bold text-primary">0{{ forloop.counter }}</span>
+                        <span class="text-gray-500">/</span>
+                        <span class="text-gray-500">0{{ banners.images.count }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <button onclick="prevSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 w-14 h-14 border border-white/30 bg-black/20 backdrop-blur-sm flex items-center justify-center hover:bg-primary hover:border-primary transition-all group text-white">
+            <i data-lucide="arrow-left" class="w-5 h-5 group-hover:scale-125 transition"></i>
+        </button>
+        <button onclick="nextSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 w-14 h-14 border border-white/30 bg-black/20 backdrop-blur-sm flex items-center justify-center hover:bg-primary hover:border-primary transition-all group text-white">
+            <i data-lucide="arrow-right" class="w-5 h-5 group-hover:scale-125 transition"></i>
+        </button>
+        <div class="absolute bottom-8 right-8 flex items-center gap-2">
+            {% for image in banners.images.all %}
+            <button onclick="goToSlide({{ forloop.counter0 }})" class="indicator h-1 transition-all duration-500 hover:bg-white {% if forloop.first %}active w-12 bg-primary{% else %}w-6 bg-white/30{% endif %}"></button>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Latest News -->
+<section class="py-20 px-4 md:px-8 lg:px-16">
+    <div class="container mx-auto">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 reveal">
+            <div>
+                <p class="text-primary text-sm uppercase tracking-[5px] mb-4">ताजा अपडेट</p>
+                <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 dark:text-white">ताजा <span class="text-stroke">समाचार</span></h2>
+            </div>
+            <a href="{% url 'news' %}" class="mt-6 md:mt-0 inline-flex items-center gap-3 px-6 py-3 bg-primary text-white hover:bg-red-700 transition group">
+                <span class="uppercase tracking-wider text-sm">सबै हेर्नुहोस्</span>
+                <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-2 transition"></i>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for item in news %}
+            <article class="reveal card-hover border group bg-white dark:bg-zinc-900 border-gray-100 dark:border-white/5" style="transition-delay: {{ forloop.counter0 }}00ms;">
+                <div class="relative h-56 overflow-hidden">
+                    {% if item.news_image %}
+                    <img src="{{ item.news_image.url }}" alt="{{ item.news_title }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                    {% else %}
+                    <div class="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                        <i data-lucide="newspaper" class="w-16 h-16 text-gray-300 dark:text-white/10"></i>
+                    </div>
+                    {% endif %}
+                    <div class="absolute top-4 left-4 bg-primary px-4 py-2 text-white">
+                        <p class="text-lg font-bold leading-none">{{ item.created_at|date:"d" }}</p>
+                        <p class="text-xs uppercase">{{ item.created_at|date:"M" }}</p>
+                    </div>
+                    <div class="absolute inset-0 bg-primary/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500">
+                        <a href="{% url 'news_detail' item.slug %}" class="w-16 h-16 border-2 border-white text-white flex items-center justify-center hover:bg-white hover:text-primary transition">
+                            <i data-lucide="arrow-right" class="w-6 h-6"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-3 line-clamp-2 group-hover:text-primary transition text-gray-800 dark:text-white">{{ item.news_title }}</h3>
+                    <p class="text-sm line-clamp-2 mb-4 text-gray-500 dark:text-gray-400">{{ item.news_descriptions|truncatewords:15 }}</p>
+                    <a href="{% url 'news_detail' item.slug %}" class="inline-flex items-center gap-2 text-primary text-sm uppercase tracking-wider hover-line">
+                        थप पढ्नुहोस् <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </article>
+            {% empty %}
+            <p class="col-span-3 text-center text-gray-500 dark:text-gray-400 py-12">समाचार उपलब्ध छैन</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- About & Downloads - FULL CONTENT -->
+<section class="py-20 px-4 md:px-8 lg:px-16 bg-gray-50 dark:bg-zinc-900/50">
+    <div class="container mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            <!-- About - FULL CONTENT -->
+            <div class="reveal">
+                <p class="text-primary text-sm uppercase tracking-[5px] mb-4">हाम्रो बारेमा</p>
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 text-gray-800 dark:text-white">काठमाडौंको <br><span class="text-stroke">शपिङ हब</span></h2>
+                
+                <div class="space-y-6 leading-relaxed text-gray-600 dark:text-gray-400">
+                    <p>
+                        <strong class="text-gray-800 dark:text-white">बिशाल बजार कम्पनी लिमिटेड</strong> काठमाडौंको सबैभन्दा मनपर्ने र ऐतिहासिक शपिङ कम्प्लेक्स हो। 
+                        यो कम्प्लेक्स <strong class="text-primary">वि.सं. २०२६</strong> सालमा स्थापना भएको थियो र तब देखि नै यसले नेपाली ग्राहकहरूलाई 
+                        उच्च गुणस्तरीय सेवा प्रदान गर्दै आएको छ।
+                    </p>
+                    
+                    <p>
+                        <strong class="text-gray-800 dark:text-white">५० वर्षभन्दा बढी</strong> समयको अनुभव र विश्वासको साथ, बिशाल बजारले लाखौं 
+                        ग्राहकहरूको विश्वास जित्न सफल भएको छ। यहाँ कपडा, इलेक्ट्रोनिक्स, गहना, घरायसी सामान, 
+                        खेलकुद सामग्री र विभिन्न प्रकारका उत्पादनहरू उपलब्ध छन्।
+                    </p>
+
+                    <p>
+                        काठमाडौंको मुटु <strong class="text-gray-800 dark:text-white">न्यू रोड</strong>मा अवस्थित यो कम्प्लेक्स 
+                        <strong class="text-primary">नेपाल स्टक एक्सचेन्ज (NEPSE)</strong> मा "BBC" को संकेतमा सूचीकृत छ। 
+                        हालको चुक्ता पूँजी <strong class="text-gray-800 dark:text-white">रु. ४९,१४०,०००</strong> रहेको छ।
+                    </p>
+
+                    <p>
+                        हामी सधैं ग्राहक सन्तुष्टिलाई प्राथमिकता दिँदै आएका छौं र भविष्यमा पनि यही परम्परा जारी राख्ने 
+                        प्रतिबद्धता व्यक्त गर्दछौं। तपाईंको विश्वास नै हाम्रो सफलताको आधार हो।
+                    </p>
+                </div>
+                
+                <div class="flex flex-wrap gap-4 mt-10">
+                    <a href="#" class="px-8 py-4 bg-primary text-white uppercase tracking-wider text-sm magnetic-btn hover:bg-red-700 transition">
+                        <span class="flex items-center gap-2">
+                            <i data-lucide="info" class="w-4 h-4"></i>
+                            थप जान्नुहोस्
+                        </span>
+                    </a>
+                    <a href="{% url 'contact' %}" class="px-8 py-4 border uppercase tracking-wider text-sm hover:bg-primary hover:text-white hover:border-primary transition border-gray-300 dark:border-white/30 text-gray-700 dark:text-white">
+                        <span class="flex items-center gap-2">
+                            <i data-lucide="phone" class="w-4 h-4"></i>
+                            सम्पर्क गर्नुहोस्
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Downloads Preview -->
+            <div class="reveal" style="transition-delay: 0.2s;">
+                <div class="flex items-end justify-between mb-8">
+                    <div>
+                        <p class="text-primary text-sm uppercase tracking-[5px] mb-4">स्रोतहरू</p>
+                        <h2 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white">डाउनलोड</h2>
+                    </div>
+                    <a href="{% url 'report' %}" class="inline-flex items-center gap-2 text-primary text-sm uppercase tracking-wider hover-line">
+                        सबै <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+                
+                <div class="space-y-3 max-h-[500px] overflow-y-auto pr-4 custom-scroll">
+                    {% for download in downloads %}
+                    <div class="flex items-center gap-4 p-5 border bg-white dark:bg-zinc-900 border-gray-100 dark:border-white/5 group hover:border-primary transition">
+                        <div class="w-12 h-12 bg-primary/10 flex items-center justify-center group-hover:bg-primary transition flex-shrink-0">
+                            <i data-lucide="file-text" class="w-5 h-5 text-primary group-hover:text-white transition"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-sm line-clamp-1 text-gray-800 dark:text-white">{{ download.download_title }}</p>
+                            <p class="text-xs text-gray-400 dark:text-gray-500">PDF Document • {{ download.created_at|date:"M d, Y" }}</p>
+                        </div>
+                        <div class="flex items-center gap-2 flex-shrink-0">
+                            <a href="{{ download.download_file.url }}" target="_blank" class="w-10 h-10 border border-gray-200 dark:border-white/10 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-zinc-800 hover:border-primary transition" title="View">
+                                <i data-lucide="eye" class="w-4 h-4 text-gray-500"></i>
+                            </a>
+                            <a href="{{ download.download_file.url }}" download class="w-10 h-10 bg-primary text-white flex items-center justify-center hover:bg-red-700 transition" title="Download">
+                                <i data-lucide="download" class="w-4 h-4"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-gray-500 dark:text-gray-400 py-8 text-center">डाउनलोड उपलब्ध छैन</p>
+                    {% endfor %}
+                </div>
+
+                <!-- Additional Info Box -->
+                <div class="mt-8 p-6 bg-primary text-white">
+                    <h4 class="font-bold text-lg mb-3">के तपाईंलाई थाहा छ?</h4>
+                    <p class="text-white/80 text-sm leading-relaxed">
+                        बिशाल बजार नेपालको पहिलो संगठित शपिङ कम्प्लेक्स मध्ये एक हो। 
+                        यहाँ उपलब्ध सबै कागजात तथा रिपोर्टहरू आधिकारिक र प्रमाणित छन्।
+                    </p>
+                    <a href="{% url 'report' %}" class="inline-flex items-center gap-2 mt-4 text-sm uppercase tracking-wider hover:gap-3 transition-all">
+                        सबै कागजात हेर्नुहोस् <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- BOD Preview -->
+<section class="py-20 px-4 md:px-8 lg:px-16">
+    <div class="container mx-auto">
+        <div class="text-center mb-16 reveal">
+            <p class="text-primary text-sm uppercase tracking-[5px] mb-4">नेतृत्व</p>
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 dark:text-white">सञ्चालक <span class="text-stroke">समिति</span></h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {% for member in bod_members %}
+            <div class="reveal card-hover group" style="transition-delay: {{ forloop.counter0 }}00ms;">
+                <div class="relative">
+                    <div class="aspect-[4/5] overflow-hidden">
+                        {% if member.bod_image %}
+                        <img src="{{ member.bod_image.url }}" alt="{{ member.bod_name }}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
+                        {% else %}
+                        <div class="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                            <i data-lucide="user" class="w-24 h-24 text-gray-300 dark:text-white/10"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-8 text-white">
+                        <div class="w-12 h-0.5 bg-primary mb-4"></div>
+                        <h3 class="text-2xl font-bold mb-2">{{ member.bod_name }}</h3>
+                        <p class="text-primary uppercase tracking-wider text-sm">{{ member.bod_position }}</p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="col-span-2 text-center text-gray-500 dark:text-gray-400 py-12">सञ्चालक उपलब्ध छैन</p>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-12 reveal">
+            <a href="{% url 'bod' %}" class="inline-flex items-center gap-4 px-10 py-5 bg-primary text-white uppercase tracking-wider text-sm magnetic-btn hover:bg-red-700 transition">
+                सबै सदस्य हेर्नुहोस्
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Preview -->
+<section class="py-20 px-4 md:px-8 lg:px-16 bg-gray-50 dark:bg-zinc-900/50">
+    <div class="container mx-auto">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 reveal">
+            <div>
+                <p class="text-primary text-sm uppercase tracking-[5px] mb-4">तस्बिरहरू</p>
+                <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 dark:text-white">ग्यालेरी</h2>
+            </div>
+            <a href="{% url 'gallery' %}" class="mt-6 md:mt-0 inline-flex items-center gap-3 px-6 py-3 bg-primary text-white hover:bg-red-700 transition group">
+                <span class="uppercase tracking-wider text-sm">सबै हेर्नुहोस्</span>
+                <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-2 transition"></i>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {% for item in gallery %}
+            <div class="reveal aspect-square overflow-hidden group cursor-pointer" onclick="openGalleryModal('{{ item.gallery_image.url }}', '{{ item.gallery_title }}')" style="transition-delay: {{ forloop.counter0 }}00ms;">
+                <div class="relative w-full h-full">
+                    <img src="{{ item.gallery_image.url }}" alt="{{ item.gallery_title }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                    <div class="absolute inset-0 bg-primary/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-500">
+                        <i data-lucide="expand" class="w-8 h-8 text-white"></i>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="col-span-6 text-center text-gray-500 dark:text-gray-400 py-12">ग्यालेरी उपलब्ध छैन</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Modal -->
+<div id="galleryModal" class="fixed inset-0 bg-black/95 z-[100] hidden items-center justify-center p-4" onclick="closeGalleryModal()">
+    <button class="absolute top-8 right-8 w-14 h-14 border border-white/30 flex items-center justify-center hover:bg-primary hover:border-primary transition text-white">
+        <i data-lucide="x" class="w-6 h-6"></i>
+    </button>
+    <div class="max-w-5xl w-full" onclick="event.stopPropagation()">
+        <img id="modalImage" src="" alt="" class="w-full">
+        <p id="modalTitle" class="text-center mt-6 text-xl font-bold text-white"></p>
+    </div>
+</div>
+
+<style>
+    .carousel-slide.active { opacity: 1; }
+    .indicator.active { width: 48px; background: #DC2626; }
+</style>
+
+<script>
+    // Index Page Preloader
+    window.addEventListener('load', () => {
+        // Hide the top loader from base (we have our own)
+        const topLoader = document.getElementById('topLoader');
+        if (topLoader) topLoader.style.display = 'none';
+        
+        // Show animated preloader for 2 seconds
+        setTimeout(() => {
+            const preloader = document.getElementById('indexPreloader');
+            preloader.style.opacity = '0';
+            preloader.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 500);
+        }, 2000);
+        
+        lucide.createIcons();
+    });
+
+    // Carousel
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.carousel-slide');
+    const indicators = document.querySelectorAll('.indicator');
+
+    function showSlide(n) {
+        if (slides.length === 0) return;
+        slides.forEach(s => { s.classList.remove('active'); s.style.opacity = '0'; });
+        indicators.forEach(i => { i.classList.remove('active'); i.style.width = '24px'; i.style.background = 'rgba(255,255,255,0.3)'; });
+        currentSlide = (n + slides.length) % slides.length;
+        slides[currentSlide].classList.add('active');
+        slides[currentSlide].style.opacity = '1';
+        if (indicators[currentSlide]) {
+            indicators[currentSlide].classList.add('active');
+            indicators[currentSlide].style.width = '48px';
+            indicators[currentSlide].style.background = '#DC2626';
+        }
+    }
+    function nextSlide() { showSlide(currentSlide + 1); }
+    function prevSlide() { showSlide(currentSlide - 1); }
+    function goToSlide(n) { showSlide(n); }
+    if (slides.length > 0) setInterval(nextSlide, 6000);
+
+    // Gallery Modal
+    function openGalleryModal(src, title) {
+        document.getElementById('galleryModal').classList.remove('hidden');
+        document.getElementById('galleryModal').classList.add('flex');
+        document.getElementById('modalImage').src = src;
+        document.getElementById('modalTitle').textContent = title;
+        document.body.style.overflow = 'hidden';
+        lucide.createIcons();
+    }
+    function closeGalleryModal() {
+        document.getElementById('galleryModal').classList.add('hidden');
+        document.getElementById('galleryModal').classList.remove('flex');
+        document.body.style.overflow = 'auto';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGalleryModal(); });
+    document.addEventListener('DOMContentLoaded', () => lucide.createIcons());
+</script>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'admin/_base.html' %}
+{% load static %}
+{% block title %}ड्यासबोर्ड{% endblock %}
+
+{% block breadcrumb %}
+<span class="text-gray-400">/</span>
+<span class="text-gray-700 font-medium">ड्यासबोर्ड</span>
+{% endblock %}
+
+{% block content %}
+<div class="mb-8 fade-up">
+    <h1 class="text-3xl font-bold text-gray-900 leading-tight">नमस्ते, {{ admin_name }}!</h1>
+    <p class="text-gray-500 mt-1 font-medium italic">यहाँबाट तपाईंले वेबसाइटको सबै सामग्री व्यवस्थापन गर्न सक्नुहुन्छ।</p>
+</div>
+
+<!-- Stat Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 fade-up" style="animation-delay: 100ms">
+    {% include 'admin/_stat_card.html' with count=downloads_count label="डाउनलोडहरू" icon="download" color="blue" link="admin_downloads" %}
+    {% include 'admin/_stat_card.html' with count=news_count label="समाचार" icon="newspaper" color="red" link="admin_news" %}
+    {% include 'admin/_stat_card.html' with count=gallery_count label="ग्यालेरी" icon="image" color="purple" link="admin_gallery" %}
+    {% include 'admin/_stat_card.html' with count=banners_count label="ब्यानरहरू" icon="layout" color="indigo" link="admin_banner" %}
+    {% include 'admin/_stat_card.html' with count=bod_count label="सञ्चालक समिति" icon="users" color="emerald" link="admin_bod" %}
+    {% include 'admin/_stat_card.html' with count=employee_count label="कर्मचारी" icon="user-plus" color="orange" link="admin_employee" %}
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 fade-up" style="animation-delay: 200ms">
+    <!-- Quick Summary -->
+    <div class="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 hover:shadow-md transition duration-300">
+        <div class="flex items-center justify-between mb-8 pb-4 border-b border-gray-50">
+            <h2 class="text-xl font-bold text-gray-900 flex items-center gap-3">
+                <i data-lucide="bar-chart-3" class="w-6 h-6 text-red-600"></i> संक्षिप्त विवरण
+            </h2>
+            <span class="text-xs font-bold text-gray-400 uppercase tracking-widest bg-gray-50 px-3 py-1 rounded-full border border-gray-100">आज</span>
+        </div>
+        
+        <div class="space-y-6">
+            <div class="flex items-center justify-between p-4 rounded-xl border border-gray-50 bg-gray-50/30">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center text-red-600">
+                        <i data-lucide="database" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-gray-900">कुल रेकर्डहरू</p>
+                        <p class="text-xs text-gray-500">सबै मोडलहरूको जम्मा संख्या</p>
+                    </div>
+                </div>
+                <div class="text-2xl font-black text-gray-900">{{ total_records }}</div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="p-4 rounded-xl border border-gray-100 bg-white">
+                    <p class="text-xs font-bold text-gray-400 uppercase mb-1">अन्तिम अपडेट</p>
+                    <p class="text-sm font-bold text-gray-900">{{ last_update|default:"अहिले" }}</p>
+                </div>
+                <div class="p-4 rounded-xl border border-gray-100 bg-white">
+                    <p class="text-xs font-bold text-gray-400 uppercase mb-1">सर्भर स्थिति</p>
+                    <p class="text-sm font-bold text-green-600 flex items-center gap-1.5"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> सञ्चालनमा</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 hover:shadow-md transition duration-300">
+        <h2 class="text-xl font-bold text-gray-900 flex items-center gap-3 mb-8 pb-4 border-b border-gray-50">
+            <i data-lucide="zap" class="w-5 h-5 text-yellow-500 fill-yellow-500"></i> थप लिङ्कहरू
+        </h2>
+        <div class="space-y-3">
+            <a href="{% url 'index' %}" target="_blank" class="flex items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-red-200 hover:bg-red-50 group transition duration-200">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="external-link" class="w-5 h-5 text-gray-400 group-hover:text-red-500 transition"></i>
+                    <span class="text-sm font-semibold text-gray-700 group-hover:text-red-700">साइट हेर्नुहोस्</span>
+                </div>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300 group-hover:text-red-400 transition"></i>
+            </a>
+
+            <a href="/django-admin/" target="_blank" class="flex items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50 group transition duration-200">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="settings" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition"></i>
+                    <span class="text-sm font-semibold text-gray-700 group-hover:text-gray-900">Admin Login</span>
+                </div>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300 group-hover:text-gray-400 transition"></i>
+            </a>
+            
+            <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+                <p class="text-xs text-center text-gray-500 font-medium">हाम्रो सिस्टम प्रयोग गरिदिनुभएकोमा धन्यवाद।</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

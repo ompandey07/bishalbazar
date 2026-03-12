@@ -1,0 +1,71 @@
+{% load static %}
+<!-- Sidebar -->
+<aside id="adminSidebar" class="fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-200 z-40 flex flex-col transition-transform duration-300 ease-in-out">
+    
+    <!-- Nav Links (Logo and admin info moved to header) -->
+    <nav class="flex-1 overflow-y-auto py-6 px-4">
+        {% with request.resolver_match.url_name as current_url %}
+
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest px-2 mb-3">मुख्य</p>
+
+        <a href="{% url 'admin_dashboard' %}"
+           class="flex items-center gap-3 px-3 py-2.5 mt-10 rounded-lg mb-1 transition-all duration-200 group
+                  {% if current_url == 'admin_dashboard' %}bg-red-50 text-red-600 font-semibold{% else %}text-gray-600 hover:bg-gray-50 hover:text-red-500{% endif %}">
+            <i data-lucide="layout-dashboard" class="w-5 h-5 flex-shrink-0 {% if current_url == 'admin_dashboard' %}text-red-600{% else %}text-gray-400 group-hover:text-red-500{% endif %}"></i>
+            <span class="text-sm">ड्यासबोर्ड</span>
+        </a>
+
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest px-2 mt-6 mb-3">कम्पनी व्यवस्थापन</p>
+
+        <a href="{% url 'admin_downloads' %}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg mb-1 transition-all duration-200 group
+                  {% if current_url == 'admin_downloads' %}bg-red-50 text-red-600 font-semibold{% else %}text-gray-600 hover:bg-gray-50 hover:text-red-500{% endif %}">
+            <i data-lucide="download" class="w-5 h-5 flex-shrink-0 {% if current_url == 'admin_downloads' %}text-red-600{% else %}text-gray-400 group-hover:text-red-500{% endif %}"></i>
+            <span class="text-sm">डाउनलोडहरू</span>
+        </a>
+
+        <a href="{% url 'admin_news' %}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg mb-1 transition-all duration-200 group
+                  {% if current_url == 'admin_news' %}bg-red-50 text-red-600 font-semibold{% else %}text-gray-600 hover:bg-gray-50 hover:text-red-500{% endif %}">
+            <i data-lucide="newspaper" class="w-5 h-5 flex-shrink-0 {% if current_url == 'admin_news' %}text-red-600{% else %}text-gray-400 group-hover:text-red-500{% endif %}"></i>
+            <span class="text-sm">समाचार</span>
+        </a>
+
+        <a href="{% url 'admin_gallery' %}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg mb-1 transition-all duration-200 group
+                  {% if current_url == 'admin_gallery' %}bg-red-50 text-red-600 font-semibold{% else %}text-gray-600 hover:bg-gray-50 hover:text-red-500{% endif %}">
+            <i data-lucide="image" class="w-5 h-5 flex-shrink-0 {% if current_url == 'admin_gallery' %}text-red-600{% else %}text-gray-400 group-hover:text-red-500{% endif %}"></i>
+            <span class="text-sm">ग्यालेरी</span>
+        </a>
+
+        <a href="{% url 'admin_banner' %}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg mb-1 transition-all duration-200 group
+                  {% if current_url == 'admin_banner' %}bg-red-50 text-red-600 font-semibold{% else %}text-gray-600 hover:bg-gray-50 hover:text-red-500{% endif %}">
+            <i data-lucide="layout" class="w-5 h-5 flex-shrink-0 {% if current_url == 'admin_banner' %}text-red-600{% else %}text-gray-400 group-hover:text-red-500{% endif %}"></i>
+            <span class="text-sm">ब्यानर</span>
+        </a>
+
+        <a href="{% url 'admin_bod' %}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg mb-1 transition-all duration-200 group
+                  {% if current_url == 'admin_bod' %}bg-red-50 text-red-600 font-semibold{% else %}text-gray-600 hover:bg-gray-50 hover:text-red-500{% endif %}">
+            <i data-lucide="users" class="w-5 h-5 flex-shrink-0 {% if current_url == 'admin_bod' %}text-red-600{% else %}text-gray-400 group-hover:text-red-500{% endif %}"></i>
+            <span class="text-sm">सञ्चालक समिति</span>
+        </a>
+
+        <a href="{% url 'admin_employee' %}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg mb-1 transition-all duration-200 group
+                  {% if current_url == 'admin_employee' %}bg-red-50 text-red-600 font-semibold{% else %}text-gray-600 hover:bg-gray-50 hover:text-red-500{% endif %}">
+            <i data-lucide="user-plus" class="w-5 h-5 flex-shrink-0 {% if current_url == 'admin_employee' %}text-red-600{% else %}text-gray-400 group-hover:text-red-500{% endif %}"></i>
+            <span class="text-sm">कर्मचारी</span>
+        </a>
+
+        <a href="{% url 'admin_logout' %}"
+           class="flex items-center gap-3 px-3 py-2.5 rounded-lg mb-1 transition-all duration-200 group
+                  {% if current_url == 'admin_logout' %}bg-red-50 text-red-600 font-semibold{% else %}text-gray-600 hover:bg-gray-50 hover:text-red-500{% endif %}">
+            <i data-lucide="log-out" class="w-5 h-5 flex-shrink-0 {% if current_url == 'admin_logout' %}text-red-600{% else %}text-gray-400 group-hover:text-red-500{% endif %}"></i>
+            <span class="text-sm">लगआउट</span>
+        </a>
+
+        {% endwith %}
+    </nav>
+</aside>
